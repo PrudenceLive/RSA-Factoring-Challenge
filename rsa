@@ -1,0 +1,87 @@
+import subprocess
+
+def find_smallest_divisor(num):
+    """
+    Finds the smallest divisor of a given number.
+    """
+    divisor = 2
+
+    while num % divisor != 0:
+        divisor += 1
+
+    return divisor
+
+def is_prime(num):
+    """
+    Checks if a number is prime.
+    """
+    if num <= 1:
+        return False
+
+    if num == 2:
+        return True
+
+    if num % 2 == 0:
+        return False
+
+    divisor = 3
+    while divisor * divisor <= num:
+        if num % divisor == 0:
+            return False
+        divisor += 2
+
+    return True
+
+def generate_prime():
+    """
+    Generates a prime number.
+    """
+    while True:
+        num = int(input("Enter a prime number: "))
+        if is_prime(num):
+            return num
+        else:
+            print("Invalid input. Please enter a prime number.")
+
+def calculate_phi(p, q):
+    """
+    Calculates Euler's totient function (phi) for RSA.
+    """
+    return (p - 1) * (q - 1)
+
+def generate_rsa_keypair():
+    """
+    Generates an RSA key pair and displays the public and private keys.
+    """
+    print("RSA Key Pair Generator")
+    print("----------------------")
+
+    print("\nEnter two prime numbers (p and q):")
+    p = generate_prime()
+    q = generate_prime()
+
+    n = p * q
+    phi = calculate_phi(p, q)
+
+    # Choose a public exponent (e)
+    e = 2
+    while e < phi:
+        if find_smallest_divisor(e) == 1:
+            break
+        e += 1
+
+    # Calculate the private exponent (d)
+    d = 2
+    while True:
+        if (d * e) % phi == 1:
+            break
+        d += 1
+
+    print("\nRSA Key Pair Generated:")
+    print("-----------------------")
+    print(f"Public Key (n, e): ({n}, {e})")
+    print(f"Private Key (n, d): ({n}, {d})")
+
+if __name__ == "__main__":
+    generate_rsa_keypair()
+
